@@ -2,6 +2,8 @@
 
 A static, single-page-per-tool study site for the GRE General Test: vocabulary flashcards, quant concept flashcards, and timed practice quizzes for Verbal and Quantitative Reasoning, with a full answer key and explanations. Includes light gamification (daily streak, XP, levels) using `localStorage` — no backend, no build step, no dependencies beyond two Google Fonts.
 
+Currently deployed on Github pages: https://will7i1am3.github.io/gre-study-hub/
+
 ## Content
 
 - 200 GRE-level vocabulary words (definition + example sentence)
