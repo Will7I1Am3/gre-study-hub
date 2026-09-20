@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Full-Length Mock Exam — GRE Study Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/style.css?v=__BUILD_ID__">
+</head>
+<body class="section-mock">
+<div class="wrap">
+<div class="inner">
+
+<div class="topbar">
+<a class="home-link" href="index.html">&larr; Home</a>
+<div class="pillrow" id="gamify-header"></div>
+</div>
+
+<div id="screen-start">
+<h1 style="font-size:28px;margin-bottom:4px;">Full-Length Mock Exam</h1>
+<p style="color:var(--ink-soft);margin:0 0 18px 0;font-size:14.5px;">A timed, full-length simulation of the GRE General Test's Verbal and Quantitative sections &mdash; four sections, no breaks, no answer feedback until the whole exam is done.</p>
+
+<div class="exam-disclaimer">
+<strong>What this does and doesn't simulate:</strong> matches ETS's current section structure and timing exactly &mdash; Verbal Section 1 (12 questions, 18 min), Verbal Section 2 (15 questions, 23 min), Quantitative Section 1 (12 questions, 21 min), Quantitative Section 2 (15 questions, 26 min), 1 hr 28 min total, sections in random order, no breaks. It leaves out the 30-minute Analytical Writing essay (nothing here can grade writing) and is <strong>not section-level adaptive</strong> &mdash; every section draws from a fixed mix of question types and difficulties rather than getting harder or easier based on how you did on the previous section. Your reported Verbal and Quant scores are an <strong>estimate</strong> on the official 130&ndash;170 scale, not an ETS-calculated score &mdash; ETS doesn't publish its real scoring formula.
+</div>
+
+<div id="history-section" style="margin-bottom:26px;">
+<div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:800;margin-bottom:10px;">Recent mock exams</div>
+<div id="mock-history-list"></div>
+<div id="mock-history-empty">No mock exams yet &mdash; take one and it'll show up here so you can come back and review it.</div>
+</div>
+
+<button class="start-btn" id="start-exam-btn">Start full-length mock exam</button>
+</div>
+
+<div id="screen-exam" class="hidden">
+
+<div class="exam-banner">
+<div>
+<div class="exam-section-name" id="exam-section-name"></div>
+<div class="exam-section-sub" id="exam-section-sub"></div>
+</div>
+<div class="exam-timer" id="exam-timer"></div>
+</div>
+
+<div class="exam-nav-grid" id="exam-nav-grid"></div>
+
+<div id="exam-context-box" class="context-box hidden">
+<div class="label" id="exam-context-label"></div>
+<div id="exam-context-text"></div>
+</div>
+
+<div id="exam-prompt-text" style="font-size:17px;line-height:1.6;margin-bottom:18px;white-space:pre-line;"></div>
+<div id="exam-select-hint" class="hidden" style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;font-weight:600;">Select exactly two answers that both fit and create equivalent sentences.</div>
+
+<div id="exam-choices-container"></div>
+
+<div style="display:flex;justify-content:space-between;gap:12px;margin-top:22px;">
+<button class="ctrl-btn" id="exam-prev-btn">&larr; Prev</button>
+<button class="start-btn inline" id="exam-next-btn">Next question &rarr;</button>
+</div>
+<div style="text-align:center;margin-top:20px;">
+<button class="reset-link" id="exam-end-section-btn">End section now and continue</button>
+</div>
+</div>
+
+<div id="screen-results" class="hidden">
+
+<div class="exam-disclaimer">
+Scores below are an <strong>estimate</strong> on the official 130&ndash;170 GRE scale, derived from your raw number correct &mdash; not an ETS-calculated score. Percentiles are likewise approximate, anchored to ETS's published percentile tables.
+</div>
+
+<div class="score-card-row">
+<div class="score-card">
+<div class="score-label">Verbal Reasoning (est.)</div>
+<div class="score-big" id="score-verbal-big"></div>
+<div class="score-raw" id="score-verbal-raw"></div>
+<div class="score-pct" id="score-verbal-pct"></div>
+</div>
+<div class="score-card">
+<div class="score-label">Quant Reasoning (est.)</div>
+<div class="score-big" id="score-quant-big"></div>
+<div class="score-raw" id="score-quant-raw"></div>
+<div class="score-pct" id="score-quant-pct"></div>
+</div>
+</div>
+
+<div style="text-align:center;margin-bottom:24px;">
+<div id="exam-xp-earned-text" style="font-size:13px;color:var(--xp-dark);font-weight:800;"></div>
+<div style="margin-top:16px;">
+<button class="ctrl-btn" id="exam-restart-btn">Back to start</button>
+</div>
+</div>
+
+<div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:800;margin-bottom:14px;">Section-by-section review</div>
+<div id="exam-review-list"></div>
+
+</div>
+
+</div>
+</div>
+
+<script src="js/data.js?v=__BUILD_ID__"></script>
+<script src="js/gamify.js?v=__BUILD_ID__"></script>
+<script src="js/mock-exam.js?v=__BUILD_ID__"></script>
+</body>
+</html>

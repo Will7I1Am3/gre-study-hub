@@ -30,6 +30,14 @@
 
 <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:36px;">
 
+<a class="tile tile-mock" href="mock-exam.html" style="grid-column:1 / -1;">
+<svg class="icon" viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="1.8" style="margin-bottom:14px;"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+<div class="kicker">New &middot; Full Simulation</div>
+<h2>Full-Length Mock Exam</h2>
+<p id="tile-mock-desc"></p>
+<div class="cta">Take the exam &rarr;</div>
+</a>
+
 <a class="tile tile-verbal" href="verbal-flashcards.html">
 <svg class="icon" viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="1.8" style="margin-bottom:14px;"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/></svg>
 <div class="kicker">Flashcards</div>
@@ -81,7 +89,7 @@
 </div>
 
 <div class="infobox" style="margin-bottom:24px;">
-<strong style="color:var(--ink);">About the current GRE General Test:</strong> five sections in about 1 hour 58 minutes &mdash; one Analyze an Issue essay (30 min), two Verbal Reasoning sections (12 and 15 questions), and two Quantitative Reasoning sections (12 and 15 questions), with section-level adaptive difficulty. The content here is original study material written to match these question formats and commonly tested topics &mdash; it is not reproduced from ETS or any commercial test-prep publisher.
+<strong style="color:var(--ink);">About the current GRE General Test:</strong> five sections in about 1 hour 58 minutes &mdash; one Analyze an Issue essay (30 min), two Verbal Reasoning sections (12 and 15 questions), and two Quantitative Reasoning sections (12 and 15 questions), with section-level adaptive difficulty and no breaks between sections. The Full-Length Mock Exam above simulates the Verbal and Quant sections with matching timing; it leaves out the essay (nothing here can grade writing) and reports an estimated score, not an official one. The content here is original study material written to match these question formats and commonly tested topics &mdash; it is not reproduced from ETS or any commercial test-prep publisher.
 </div>
 
 <div style="text-align:center;">
@@ -94,6 +102,7 @@
 <script src="js/data.js?v=__BUILD_ID__"></script>
 <script src="js/gamify.js?v=__BUILD_ID__"></script>
 <script>
+  document.getElementById('tile-mock-desc').textContent = 'The real GRE structure and timing (minus the essay): 4 sections, 54 questions, 1 hr 28 min, no breaks, no answer feedback until you finish. Get an estimated 130–170 score when you’re done.';
   document.getElementById('tile-verbal-desc').textContent = VOCAB.length + ' GRE-level words. Flip, mark as known, and let the deck focus on what you\'re still learning.';
   document.getElementById('tile-quant-desc').textContent = QUANT_CONCEPTS.length + ' formulas and concepts across arithmetic, algebra, geometry, and data analysis, with worked examples.';
   document.getElementById('tile-vq-desc').textContent = 'Six 45-question practice sets (' + VERBAL_QUESTIONS.length + ' total, including three Hard sets) of Text Completion, Sentence Equivalence, and Reading Comprehension, with timed mode and a full answer key.';
