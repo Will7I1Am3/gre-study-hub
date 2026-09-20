@@ -7,6 +7,8 @@
   const TYPE_KEYS = cfg.typeKeys;
   const TYPE_LABELS = cfg.typeLabels;
   const BEST_KEY = cfg.bestKey;
+  const HISTORY_KEY = cfg.bestKey + '_history';
+  const HISTORY_MAX = 5;
   const PER_Q_SECONDS = cfg.perQSeconds;
   const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -27,7 +29,8 @@
     timed: false,
     finalScore: 0,
     finalTotal: 0,
-    xpEarnedThisRun: 0
+    xpEarnedThisRun: 0,
+    reviewingPast: false
   };
   let timerId = null;
 
@@ -58,6 +61,8 @@
     screenQuiz: document.getElementById('screen-quiz'),
     screenResults: document.getElementById('screen-results'),
     bestScoreLine: document.getElementById('best-score-line'),
+    historyList: document.getElementById('history-list'),
+    historyEmpty: document.getElementById('history-empty'),
     setPicker: document.getElementById('set-picker'),
     setBtns: Array.prototype.slice.call(document.querySelectorAll('.set-btn')),
     filterAll: document.getElementById('filter-all'),
@@ -107,6 +112,62 @@
   document.getElementById('filter-c-label').textContent = TYPE_LABELS[TYPE_KEYS[2]];
   el.timedLabel.textContent = 'Timed practice (' + PER_Q_SECONDS + ' seconds per question, like real GRE pacing)';
 
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); } catch (e) { return []; }
+  }
+
+  function saveAttemptToHistory(record) {
+    try {
+      const hist = loadHistory();
+      hist.unshift(record);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(hist.slice(0, HISTORY_MAX)));
+    } catch (e) {}
+  }
+
+  function formatHistoryDate(iso) {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' · ' +
+      d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  }
+
+  function renderHistory() {
+    if (!el.historyList) return;
+    const hist = loadHistory();
+    el.historyList.innerHTML = '';
+    if (el.historyEmpty) el.historyEmpty.classList.toggle('hidden', hist.length > 0);
+    hist.forEach((rec) => {
+      const pct = rec.total > 0 ? Math.round((rec.score / rec.total) * 100) : 0;
+      const row = document.createElement('div');
+      row.className = 'history-card';
+      const metaBits = [formatHistoryDate(rec.date)];
+      if (HAS_SETS && rec.set) metaBits.push('Set ' + rec.set);
+      if (rec.timed) metaBits.push('Timed');
+      row.innerHTML =
+        '<div>' +
+        '<div class="history-meta">' + escapeHtml(metaBits.join(' · ')) + '</div>' +
+        '<div class="history-score">' + rec.score + ' / ' + rec.total + ' <span class="history-pct">(' + pct + '%)</span></div>' +
+        '</div>' +
+        '<button class="ctrl-btn history-review-btn" type="button">Review</button>';
+      row.querySelector('.history-review-btn').addEventListener('click', () => reviewAttempt(rec));
+      el.historyList.appendChild(row);
+    });
+  }
+
+  function reviewAttempt(rec) {
+    if (timerId) { clearInterval(timerId); timerId = null; }
+    state.order = (rec.order || []).slice();
+    state.selections = rec.selections || {};
+    state.finalScore = rec.score;
+    state.finalTotal = rec.total;
+    state.xpEarnedThisRun = 0;
+    state.reviewingPast = true;
+    state.screen = 'results';
+    showScreen('results');
+    renderResults();
+    window.scrollTo(0, 0);
+  }
+
   function showScreen(name) {
     el.screenSetup.classList.toggle('hidden', name !== 'setup');
     el.screenQuiz.classList.toggle('hidden', name !== 'quiz');
@@ -141,6 +202,7 @@
       btn.classList.toggle('active', btn.dataset.type === state.pendingFilter);
     });
     el.timedCb.checked = state.pendingTimed;
+    renderHistory();
   }
 
   el.setBtns.forEach((btn) => {
@@ -175,7 +237,8 @@
     if (timerId) { clearInterval(timerId); timerId = null; }
     Object.assign(state, {
       screen: 'quiz', order, idx: 0, selections: {}, checked: {},
-      timeRemaining: totalTime, totalTime, timed: state.pendingTimed, xpEarnedThisRun: 0
+      timeRemaining: totalTime, totalTime, timed: state.pendingTimed, xpEarnedThisRun: 0,
+      reviewingPast: false
     });
     showScreen('quiz');
     renderQuiz();
@@ -257,15 +320,27 @@
         localStorage.setItem(BEST_KEY, JSON.stringify({ score, total }));
       }
     } catch (e) {}
+    saveAttemptToHistory({
+      id: Date.now(),
+      date: new Date().toISOString(),
+      set: HAS_SETS ? state.pendingSet : null,
+      filterType: state.pendingFilter,
+      timed: state.timed,
+      score, total,
+      order: state.order.slice(),
+      selections: state.selections
+    });
     state.screen = 'results';
     state.finalScore = score;
     state.finalTotal = total;
+    state.reviewingPast = false;
     showScreen('results');
     renderResults();
   }
 
   el.restartBtn.addEventListener('click', () => {
     if (timerId) { clearInterval(timerId); timerId = null; }
+    state.reviewingPast = false;
     state.screen = 'setup';
     showScreen('setup');
     renderSetup();
@@ -340,8 +415,10 @@
       return '<svg class="star" viewBox="0 0 24 24" width="30" height="30" fill="' + fill + '" stroke="var(--ink)" stroke-width="1.3"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8L6 21l1.6-7L2.2 9.2l7.1-.6z"/></svg>';
     }).join('');
     el.finalScore.textContent = state.finalScore + ' / ' + state.finalTotal;
-    el.scoreMessage.textContent = pct >= 80 ? 'Excellent work.' : pct >= 60 ? 'Solid effort — review the missed ones below.' : 'Keep practicing — review the explanations below.';
-    el.xpEarnedText.textContent = '+' + state.xpEarnedThisRun + ' XP earned this run';
+    el.scoreMessage.textContent = state.reviewingPast
+      ? 'Reviewing a past attempt.'
+      : (pct >= 80 ? 'Excellent work.' : pct >= 60 ? 'Solid effort — review the missed ones below.' : 'Keep practicing — review the explanations below.');
+    el.xpEarnedText.textContent = state.reviewingPast ? 'Reviewing a saved attempt — no new XP' : '+' + state.xpEarnedThisRun + ' XP earned this run';
 
     el.reviewList.innerHTML = '';
     state.order.forEach((qIndex, i) => {

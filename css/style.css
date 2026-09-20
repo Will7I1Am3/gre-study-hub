@@ -110,6 +110,36 @@ input,label{font-family:inherit;}
 .stat-pill{background:var(--surface);border:2px solid var(--ink);border-radius:999px;padding:6px 14px;font-size:13px;color:var(--ink-soft);font-weight:700;box-shadow:2px 2px 0 var(--ink);display:inline-block;}
 .star{display:inline-block;margin:0 3px;}
 
+/* Quiz attempt history (setup screen) */
+.history-card{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:12px 16px;margin-bottom:10px;box-shadow:3px 3px 0 var(--ink);display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.history-meta{font-size:12px;color:var(--ink-soft);font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px;}
+.history-score{font-size:16px;font-weight:800;}
+.history-pct{font-size:13px;color:var(--ink-soft);font-weight:600;}
+.history-review-btn{padding:8px 16px 6px;font-size:13px;flex-shrink:0;}
+#history-empty{font-size:14px;color:var(--ink-soft);font-weight:600;}
+
+/* Flashcard view toggle + full-list browse mode */
+.view-toggle{display:flex;gap:8px;margin-bottom:20px;}
+.view-toggle-btn{border:3px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:14px;padding:10px 18px 8px;font-size:13.5px;font-weight:800;border-bottom-width:5px;transition:transform .05s, border-bottom-width .05s;cursor:pointer;}
+.view-toggle-btn:active{transform:translateY(2px);border-bottom-width:3px;}
+.view-toggle-btn.active{border-color:var(--section-dark);background:var(--section-soft);color:var(--section-dark);}
+
+.list-search-input{flex:1;min-width:160px;padding:11px 14px;border:2px solid var(--ink);border-radius:12px;font-size:14px;font-family:inherit;color:var(--ink);background:var(--surface);}
+.list-search-input:focus{outline:none;border-color:var(--section-dark);}
+
+.word-row{background:var(--surface);border:2px solid var(--ink);border-radius:12px;padding:11px 14px;margin-bottom:8px;box-shadow:2px 2px 0 var(--ink);}
+.word-row.known{border-color:var(--good-dark);}
+.word-row-top{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.word-check{display:flex;align-items:center;flex-shrink:0;}
+.word-check input{width:18px;height:18px;cursor:pointer;accent-color:var(--good-dark);}
+.word-row-main{flex:1;display:flex;flex-direction:column;min-width:0;}
+.word-row-title{font-weight:800;font-size:15px;}
+.word-row-sub{font-size:12.5px;color:var(--ink-soft);font-style:italic;margin-top:1px;}
+.word-row-caret{font-size:11px;color:var(--ink-soft);flex-shrink:0;}
+.word-row-detail{margin-top:10px;padding-top:10px;border-top:2px dashed var(--ink);font-size:14px;line-height:1.55;}
+.word-row-example{margin-top:8px;font-size:13.5px;color:var(--ink-soft);font-style:italic;}
+#word-list-empty{font-size:14px;color:var(--ink-soft);font-weight:600;text-align:center;padding:24px 0;}
+
 /* Mini stat row (used on game pages) */
 .mini-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:20px;}
 .mini-stat{background:var(--surface);border:2px solid var(--ink);border-radius:14px;padding:10px 8px;text-align:center;box-shadow:3px 3px 0 var(--ink);}
