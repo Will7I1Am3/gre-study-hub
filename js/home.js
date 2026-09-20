@@ -31,7 +31,7 @@
 
   el.resetBtn.addEventListener('click', () => {
     if (!window.confirm('Reset ALL saved progress (vocabulary, quant concepts, best quiz scores, XP, and streak)? This cannot be undone.')) return;
-    ['gre_verbal_known', 'gre_quant_known', 'gre_verbal_best', 'gre_quant_best', 'gre_xp', 'gre_streak'].forEach((k) => {
+    ['gre_verbal_known', 'gre_quant_known', 'gre_verbal_best', 'gre_quant_best', 'gre_xp', 'gre_streak', 'gre_match_best', 'gre_speed_best'].forEach((k) => {
       try { localStorage.removeItem(k); } catch (e) {}
     });
     refreshHeader();

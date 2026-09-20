@@ -10,8 +10,12 @@
   const PER_Q_SECONDS = cfg.perQSeconds;
   const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
+  const HAS_SETS = QUESTIONS.some((q) => typeof q.set === 'number');
+  const SET_NUMBERS = HAS_SETS ? Array.from(new Set(QUESTIONS.map((q) => q.set))).sort() : [1];
+
   const state = {
     screen: 'setup',
+    pendingSet: SET_NUMBERS[0],
     pendingFilter: 'all',
     pendingTimed: false,
     order: [],
@@ -54,6 +58,8 @@
     screenQuiz: document.getElementById('screen-quiz'),
     screenResults: document.getElementById('screen-results'),
     bestScoreLine: document.getElementById('best-score-line'),
+    setPicker: document.getElementById('set-picker'),
+    setBtns: Array.prototype.slice.call(document.querySelectorAll('.set-btn')),
     filterAll: document.getElementById('filter-all'),
     filterA: document.getElementById('filter-a'),
     filterB: document.getElementById('filter-b'),
@@ -107,11 +113,16 @@
     el.screenResults.classList.toggle('hidden', name !== 'results');
   }
 
+  function setPool() {
+    return HAS_SETS ? QUESTIONS.filter((q) => q.set === state.pendingSet) : QUESTIONS;
+  }
+
   function renderSetup() {
-    const countAll = QUESTIONS.length;
-    const countA = QUESTIONS.filter((q) => q.type === TYPE_KEYS[0]).length;
-    const countB = QUESTIONS.filter((q) => q.type === TYPE_KEYS[1]).length;
-    const countC = QUESTIONS.filter((q) => q.type === TYPE_KEYS[2]).length;
+    const pool = setPool();
+    const countAll = pool.length;
+    const countA = pool.filter((q) => q.type === TYPE_KEYS[0]).length;
+    const countB = pool.filter((q) => q.type === TYPE_KEYS[1]).length;
+    const countC = pool.filter((q) => q.type === TYPE_KEYS[2]).length;
     el.countAll.textContent = countAll + ' questions';
     el.countA.textContent = countA + ' questions';
     el.countB.textContent = countB + ' questions';
@@ -121,11 +132,24 @@
     try { best = JSON.parse(localStorage.getItem(BEST_KEY) || 'null'); } catch (e) {}
     el.bestScoreLine.textContent = 'Best score: ' + (best ? best.score + ' / ' + best.total : 'Not attempted yet');
 
+    if (el.setBtns.length) {
+      el.setBtns.forEach((btn) => {
+        btn.classList.toggle('active', Number(btn.dataset.set) === state.pendingSet);
+      });
+    }
     [el.filterAll, el.filterA, el.filterB, el.filterC].forEach((btn) => {
       btn.classList.toggle('active', btn.dataset.type === state.pendingFilter);
     });
     el.timedCb.checked = state.pendingTimed;
   }
+
+  el.setBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.pendingSet = Number(btn.dataset.set);
+      state.pendingFilter = 'all';
+      renderSetup();
+    });
+  });
 
   el.filterAll.dataset.type = 'all';
   el.filterA.dataset.type = TYPE_KEYS[0];
@@ -144,6 +168,7 @@
   function startQuiz() {
     const filterType = state.pendingFilter;
     let pool = QUESTIONS.map((_, i) => i);
+    if (HAS_SETS) pool = pool.filter((i) => QUESTIONS[i].set === state.pendingSet);
     if (filterType !== 'all') pool = pool.filter((i) => QUESTIONS[i].type === filterType);
     const order = shuffle(pool.slice());
     const totalTime = order.length * PER_Q_SECONDS;
@@ -254,7 +279,7 @@
     const checked = !!state.checked[qIndex];
     const hasContext = !!(q.passage || q.data);
 
-    el.progressText.textContent = 'Question ' + (state.idx + 1) + ' of ' + state.order.length;
+    el.progressText.textContent = 'Question ' + (state.idx + 1) + ' of ' + state.order.length + (HAS_SETS ? ' · Set ' + state.pendingSet : '');
     el.quizProgressFill.style.width = Math.round((state.idx / state.order.length) * 100) + '%';
     el.currentTypeLabel.textContent = TYPE_LABELS[q.type];
 

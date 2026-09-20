@@ -1,15 +1,16 @@
 # GRE Study Hub
 
-A static, single-page-per-tool study site for the GRE General Test: vocabulary flashcards, quant concept flashcards, and timed practice quizzes for Verbal and Quantitative Reasoning, with a full answer key and explanations. Includes light gamification (daily streak, XP, levels) using `localStorage` — no backend, no build step, no dependencies beyond two Google Fonts.
+A static, single-page-per-tool study site for the GRE General Test: vocabulary flashcards, two vocab game modes, quant concept flashcards, and three full timed practice sets for Verbal and Quantitative Reasoning, with a full answer key and explanations. Includes light gamification (daily streak, XP, levels) using `localStorage` — no backend, no build step, no dependencies beyond two Google Fonts.
 
 Currently deployed on Github pages: https://will7i1am3.github.io/gre-study-hub/
 
 ## Content
 
-- 200 GRE-level vocabulary words (definition + example sentence)
+- 400 GRE-level vocabulary words (definition + example sentence)
 - 45 quant concept cards (arithmetic, algebra, geometry, data analysis) with worked examples
-- 45 Verbal practice questions (Text Completion, Sentence Equivalence, Reading Comprehension)
-- 45 Quant practice questions (Problem Solving, Quantitative Comparison, Data Interpretation)
+- 3 Verbal practice sets of 45 questions each (135 total) — Text Completion, Sentence Equivalence, Reading Comprehension
+- 3 Quant practice sets of 45 questions each (135 total) — Problem Solving, Quantitative Comparison, Data Interpretation
+- 2 vocab game modes: **Vocab Matching** (pair words to definitions against the clock) and **Vocab Speed Round** (60-second rapid-fire multiple choice with combo bonuses)
 
 All of it is original material written to match commonly-tested GRE topics, vocabulary, and question formats — it is **not** copied from ETS's Official Guide or any commercial test-prep book. The GRE section/timing facts referenced on the home page (five sections, ~1h58m, question counts) were checked against ETS's own published test structure.
 
@@ -51,18 +52,22 @@ gre-study-hub/
   index.html              Home / dashboard
   verbal-flashcards.html  Vocabulary flashcards
   quant-flashcards.html   Quant concept flashcards
-  verbal-quiz.html        Verbal practice quiz
-  quant-quiz.html         Quant practice quiz
+  verbal-quiz.html        Verbal practice quiz (3 sets of 45)
+  quant-quiz.html         Quant practice quiz (3 sets of 45)
+  vocab-match.html        Vocab Matching game
+  vocab-speed.html        Vocab Speed Round game
   css/style.css           Shared design system
   js/data.js              All vocab / concept / question content
   js/gamify.js            Streak + XP helpers (shared)
   js/flashcards.js        Generic flashcard deck engine (both flashcard pages)
-  js/quiz.js              Generic quiz engine (both quiz pages)
+  js/quiz.js              Generic quiz engine (both quiz pages; reads each question's `set` field to power the practice-set picker)
+  js/match-game.js        Vocab Matching game engine
+  js/speed-game.js        Vocab Speed Round game engine
   js/home.js              Home page stats
 ```
 
 ## Notes
 
-- Progress (known words/concepts, best quiz scores, XP, streak) is stored in the browser via `localStorage`, per-device/per-browser. There's no account system or sync.
-- To add or edit content, edit the arrays in `js/data.js` (`VOCAB`, `QUANT_CONCEPTS`, `VERBAL_QUESTIONS`, `QUANT_QUESTIONS`) — each page picks up changes automatically, no other files need to change.
+- Progress (known words/concepts, best quiz scores, best game scores, XP, streak) is stored in the browser via `localStorage`, per-device/per-browser. There's no account system or sync.
+- To add or edit content, edit the arrays in `js/data.js` (`VOCAB`, `QUANT_CONCEPTS`, `VERBAL_QUESTIONS`, `QUANT_QUESTIONS`) — each page picks up changes automatically, no other files need to change. Each verbal/quant question object has a `set` field (`1`, `2`, or `3`) that controls which practice set it appears in.
 - To adjust the color palette or type scale, edit the CSS custom properties at the top of `css/style.css`.
