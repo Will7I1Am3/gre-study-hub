@@ -281,7 +281,7 @@
 
     el.progressText.textContent = 'Question ' + (state.idx + 1) + ' of ' + state.order.length + (HAS_SETS ? ' · Set ' + state.pendingSet : '');
     el.quizProgressFill.style.width = Math.round((state.idx / state.order.length) * 100) + '%';
-    el.currentTypeLabel.textContent = TYPE_LABELS[q.type];
+    el.currentTypeLabel.textContent = TYPE_LABELS[q.type] + (q.difficulty ? ' · ' + capitalize(q.difficulty) : '');
 
     el.timerText.classList.toggle('hidden', !state.timed);
     if (state.timed) {
@@ -353,7 +353,7 @@
       card.className = 'review-card';
       card.innerHTML =
         '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px;">' +
-        '<div class="kicker">Q' + (i + 1) + ' · ' + TYPE_LABELS[q.type] + '</div>' +
+        '<div class="kicker">Q' + (i + 1) + ' · ' + TYPE_LABELS[q.type] + (q.difficulty ? ' · ' + capitalize(q.difficulty) : '') + '</div>' +
         '<span class="badge ' + (correct ? 'badge-good' : 'badge-bad') + '">' + (correct ? 'Correct' : 'Incorrect') + '</span>' +
         '</div>' +
         (hasContext ? '<div class="field-label">' + (q.passage ? 'Passage' : 'Data') + '</div><div class="field-value" style="white-space:pre-line;color:var(--ink-soft);">' + escapeHtml(q.passage || q.data || '') + '</div>' : '') +
@@ -363,6 +363,10 @@
         '<div style="font-size:14px;color:var(--ink-soft);line-height:1.55;">' + escapeHtml(q.explanation) + '</div>';
       el.reviewList.appendChild(card);
     });
+  }
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   function escapeHtml(str) {

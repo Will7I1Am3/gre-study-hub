@@ -85,6 +85,7 @@ input,label{font-family:inherit;}
 .filter-btn{border:3px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:14px;padding:13px 16px 10px;font-size:14px;font-weight:700;text-align:left;width:100%;border-bottom-width:6px;transition:transform .05s, border-bottom-width .05s;}
 .filter-btn:active{transform:translateY(3px);border-bottom-width:3px;}
 .filter-btn.active{border-color:var(--section-dark);background:var(--section-soft);color:var(--section-dark);}
+.filter-btn.set-btn-hard.active{border-color:var(--bad-dark);background:var(--bad-soft);color:var(--bad-dark);}
 .filter-count{display:block;font-weight:600;font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
 
 .choice{display:block;width:100%;text-align:left;border:3px solid var(--ink);background:var(--surface);border-radius:14px;padding:14px 16px 11px;font-size:15px;line-height:1.5;margin-bottom:10px;color:var(--ink);border-bottom-width:5px;transition:transform .05s, border-bottom-width .05s;}
