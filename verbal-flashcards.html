@@ -17,7 +17,14 @@
 </div>
 
 <h1 style="font-size:28px;margin-bottom:4px;">Verbal Vocabulary</h1>
-<p style="color:var(--ink-soft);margin:0 0 18px 0;font-size:14.5px;">Tap the card to reveal the definition. Mark each word to build a personalized review deck and earn XP.</p>
+<p style="color:var(--ink-soft);margin:0 0 18px 0;font-size:14.5px;">Tap the card to reveal the definition, or switch to the full list to check off words you already know and look up one specific word.</p>
+
+<div class="view-toggle">
+<button class="view-toggle-btn active" id="view-card-btn" type="button">Study cards</button>
+<button class="view-toggle-btn" id="view-list-btn" type="button">Browse full list</button>
+</div>
+
+<div id="card-view">
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
 <div id="progress-line" style="font-size:13px;color:var(--ink-soft);font-weight:700;"></div>
@@ -59,6 +66,20 @@
 <div style="display:flex;justify-content:center;align-items:center;gap:8px;margin-top:24px;">
 <input type="checkbox" id="include-known-cb">
 <label for="include-known-cb" id="include-known-label" style="font-size:14px;color:var(--ink-soft);font-weight:600;"></label>
+</div>
+
+</div>
+
+<div id="list-view" class="hidden">
+
+<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+<input type="text" id="list-search" class="list-search-input" placeholder="Search…">
+<span id="list-count" style="font-size:13px;color:var(--ink-soft);font-weight:700;white-space:nowrap;"></span>
+</div>
+
+<div id="word-list"></div>
+<div id="word-list-empty" class="hidden">No matches.</div>
+
 </div>
 
 <div style="text-align:center;margin-top:26px;">

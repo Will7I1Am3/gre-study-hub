@@ -11,7 +11,10 @@
     deck: [],
     pos: 0,
     flipped: false,
-    includeKnown: false
+    includeKnown: false,
+    viewMode: 'card',
+    searchQuery: '',
+    expanded: {}
   };
 
   let burstTimer = null;
@@ -36,6 +39,12 @@
   }
   function saveKnown(known) {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(known)); } catch (e) {}
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : String(str);
+    return div.innerHTML;
   }
 
   // ---- DOM refs ----
@@ -63,13 +72,23 @@
     includeKnownLabel: document.getElementById('include-known-label'),
     resetBtn: document.getElementById('reset-btn'),
     burst: document.getElementById('burst'),
-    gamifyHeader: document.getElementById('gamify-header')
+    gamifyHeader: document.getElementById('gamify-header'),
+
+    viewCardBtn: document.getElementById('view-card-btn'),
+    viewListBtn: document.getElementById('view-list-btn'),
+    cardView: document.getElementById('card-view'),
+    listView: document.getElementById('list-view'),
+    listSearch: document.getElementById('list-search'),
+    listCount: document.getElementById('list-count'),
+    wordList: document.getElementById('word-list'),
+    wordListEmpty: document.getElementById('word-list-empty')
   };
 
   el.frontLabel.textContent = cfg.frontLabel;
   el.frontMain.style.fontSize = cfg.frontMainSize + 'px';
   el.tapHint.textContent = 'Tap to reveal ' + cfg.backLabelLower;
   el.includeKnownLabel.textContent = 'Include already-known ' + cfg.unitPlural + ' in rotation';
+  if (el.listSearch) el.listSearch.placeholder = 'Search ' + cfg.unitPlural + '…';
 
   function render() {
     const cardIdx = state.deck[state.pos];
@@ -165,7 +184,83 @@
     state.pos = 0;
     state.flipped = false;
     render();
+    if (state.viewMode === 'list') renderList();
   });
+
+  // ---- full-list browse mode ----
+  function setViewMode(mode) {
+    state.viewMode = mode;
+    if (el.viewCardBtn) el.viewCardBtn.classList.toggle('active', mode === 'card');
+    if (el.viewListBtn) el.viewListBtn.classList.toggle('active', mode === 'list');
+    if (el.cardView) el.cardView.classList.toggle('hidden', mode !== 'card');
+    if (el.listView) el.listView.classList.toggle('hidden', mode !== 'list');
+    if (mode === 'card') render();
+    else renderList();
+  }
+
+  function toggleRowKnown(idx, isKnown) {
+    const newKnown = Object.assign({}, state.known);
+    if (isKnown) newKnown[idx] = true;
+    else delete newKnown[idx];
+    state.known = newKnown;
+    saveKnown(newKnown);
+  }
+
+  function renderList() {
+    if (!el.wordList) return;
+    const q = state.searchQuery.trim().toLowerCase();
+    const idxs = CARDS.map((_, i) => i).filter((i) => {
+      if (!q) return true;
+      const c = CARDS[i];
+      return (c[0] + ' ' + (c[1] || '') + ' ' + (c[2] || '')).toLowerCase().indexOf(q) !== -1;
+    });
+    el.listCount.textContent = idxs.length + ' of ' + CARDS.length + ' ' + cfg.unitPlural;
+    el.wordListEmpty.classList.toggle('hidden', idxs.length > 0);
+    el.wordList.innerHTML = '';
+    idxs.forEach((i) => {
+      const c = CARDS[i];
+      const isKnown = !!state.known[i];
+      const isExpanded = !!state.expanded[i];
+      const row = document.createElement('div');
+      row.className = 'word-row' + (isKnown ? ' known' : '');
+      row.innerHTML =
+        '<div class="word-row-top">' +
+        '<label class="word-check" title="Mark known"><input type="checkbox"' + (isKnown ? ' checked' : '') + '></label>' +
+        '<div class="word-row-main">' +
+        '<span class="word-row-title">' + escapeHtml(c[0]) + '</span>' +
+        (c[1] ? '<span class="word-row-sub">' + escapeHtml(c[1]) + '</span>' : '') +
+        '</div>' +
+        '<span class="word-row-caret">' + (isExpanded ? '▲' : '▼') + '</span>' +
+        '</div>' +
+        '<div class="word-row-detail' + (isExpanded ? '' : ' hidden') + '">' +
+        '<div>' + escapeHtml(c[2]) + '</div>' +
+        (c[3] ? '<div class="word-row-example">' + escapeHtml(c[3]) + '</div>' : '') +
+        '</div>';
+      const top = row.querySelector('.word-row-top');
+      const cb = row.querySelector('input[type="checkbox"]');
+      cb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleRowKnown(i, cb.checked);
+        row.classList.toggle('known', cb.checked);
+        if (cb.checked) { addXp(5); renderGamifyHeader(el.gamifyHeader); }
+      });
+      top.addEventListener('click', (e) => {
+        if (e.target === cb) return;
+        state.expanded[i] = !state.expanded[i];
+        renderList();
+      });
+      el.wordList.appendChild(row);
+    });
+  }
+
+  if (el.viewCardBtn) el.viewCardBtn.addEventListener('click', () => setViewMode('card'));
+  if (el.viewListBtn) el.viewListBtn.addEventListener('click', () => setViewMode('list'));
+  if (el.listSearch) {
+    el.listSearch.addEventListener('input', () => {
+      state.searchQuery = el.listSearch.value;
+      renderList();
+    });
+  }
 
   // ---- init ----
   renderGamifyHeader(el.gamifyHeader);
