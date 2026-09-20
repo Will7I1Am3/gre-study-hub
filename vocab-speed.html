@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocab Speed Round — GRE Study Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="section-verbal">
+<div class="wrap">
+<div class="inner">
+
+<div class="topbar">
+<a class="home-link" href="index.html">&larr; Home</a>
+<div class="pillrow" id="gamify-header"></div>
+</div>
+
+<div id="screen-setup">
+<h1 style="font-size:28px;margin-bottom:4px;">Vocab Speed Round</h1>
+<p style="color:var(--ink-soft);margin:0 0 8px 0;font-size:14.5px;">60 seconds. Pick the correct definition as fast as you can — wrong answers just cost your combo, so keep going.</p>
+<div style="margin-bottom:24px;"><span class="stat-pill" id="best-line"></span></div>
+<button class="start-btn" id="start-btn">Start 60-second round</button>
+</div>
+
+<div id="screen-play" class="hidden">
+<div class="speed-timer-track"><div class="speed-timer-fill" id="speed-timer-fill" style="width:100%;"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:13px;font-weight:800;color:var(--ink-soft);">
+<div id="speed-timer-text">60s</div>
+<div>Score: <span id="speed-score-text" style="color:var(--ink);">0</span></div>
+<div id="speed-combo-text" style="color:var(--streak-dark);">0x combo</div>
+</div>
+
+<div class="speed-word-card">
+<div class="speed-word" id="speed-word"></div>
+<div class="speed-sub">Which definition matches this word?</div>
+</div>
+
+<div id="speed-choices"></div>
+</div>
+
+<div id="screen-results" class="hidden">
+<div style="text-align:center;margin-bottom:28px;">
+<div id="final-score" style="font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:700;color:var(--section);"></div>
+<div id="final-detail" style="font-size:15px;color:var(--ink-soft);margin-top:6px;font-weight:600;"></div>
+<div id="xp-earned-text" style="font-size:13px;color:var(--xp-dark);margin-top:8px;font-weight:800;"></div>
+<div style="display:flex;justify-content:center;gap:12px;margin-top:20px;">
+<button class="ctrl-btn" id="restart-btn">Back to start</button>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/gamify.js"></script>
+<script>
+  window.SPEED_CONFIG = {
+    vocab: VOCAB,
+    roundSeconds: 60,
+    bestKey: 'gre_speed_best'
+  };
+</script>
+<script src="js/speed-game.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocab Matching — GRE Study Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="section-verbal">
+<div class="wrap">
+<div class="inner">
+
+<div class="topbar">
+<a class="home-link" href="index.html">&larr; Home</a>
+<div class="pillrow" id="gamify-header"></div>
+</div>
+
+<h1 style="font-size:28px;margin-bottom:4px;">Vocab Matching</h1>
+<p style="color:var(--ink-soft);margin:0 0 18px 0;font-size:14.5px;">Match each word to its definition as fast as you can. Two wrong tiles just flash red — no penalty beyond your mistake count.</p>
+
+<div class="mini-stats">
+<div class="mini-stat"><div class="num" id="stat-matched">0 / 8</div><div class="label">Matched</div></div>
+<div class="mini-stat"><div class="num" id="stat-mistakes">0</div><div class="label">Mistakes</div></div>
+<div class="mini-stat"><div class="num" id="stat-time">0:00</div><div class="label">Time</div></div>
+</div>
+
+<div style="margin-bottom:18px;"><span class="stat-pill" id="best-line"></span></div>
+
+<div id="match-banner" class="match-banner hidden">
+<div>
+<div class="headline">Nice work!</div>
+<div class="sub" id="banner-text"></div>
+</div>
+<button class="start-btn inline" id="new-round-btn">Play again</button>
+</div>
+
+<div class="match-grid" id="match-grid"></div>
+
+<div style="text-align:center;margin-top:26px;">
+<button class="ctrl-btn" id="new-round-btn-bottom" onclick="document.getElementById('new-round-btn').click()">Shuffle new round</button>
+</div>
+
+</div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/gamify.js"></script>
+<script>
+  window.MATCH_CONFIG = {
+    vocab: VOCAB,
+    pairsPerRound: 8,
+    bestKey: 'gre_match_best'
+  };
+</script>
+<script src="js/match-game.js"></script>
+</body>
+</html>
