@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quant Practice — GRE Study Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="section-quant">
+<div class="wrap">
+<div class="inner">
+
+<div class="topbar">
+<a class="home-link" href="index.html">&larr; Home</a>
+<div class="pillrow" id="gamify-header"></div>
+</div>
+
+<div id="screen-setup">
+<h1 id="setup-title" style="font-size:28px;margin-bottom:4px;"></h1>
+<p id="setup-subtitle" style="color:var(--ink-soft);margin:0 0 8px 0;font-size:14.5px;"></p>
+<div style="margin-bottom:24px;"><span class="stat-pill" id="best-score-line"></span></div>
+
+<div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:800;margin-bottom:10px;">Choose a question set</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:22px;">
+<button class="filter-btn active" id="filter-all">All types<span class="filter-count" id="count-all"></span></button>
+<button class="filter-btn" id="filter-a"><span id="filter-a-label"></span><span class="filter-count" id="count-a"></span></button>
+<button class="filter-btn" id="filter-b"><span id="filter-b-label"></span><span class="filter-count" id="count-b"></span></button>
+<button class="filter-btn" id="filter-c"><span id="filter-c-label"></span><span class="filter-count" id="count-c"></span></button>
+</div>
+
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:28px;">
+<input type="checkbox" id="timed-cb">
+<label for="timed-cb" id="timed-label" style="font-size:14px;color:var(--ink-soft);font-weight:600;"></label>
+</div>
+
+<button class="start-btn" id="start-btn">Start practice set</button>
+</div>
+
+<div id="screen-quiz" class="hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+<div id="progress-text" style="font-size:13px;color:var(--ink-soft);font-weight:700;"></div>
+<div id="timer-text" class="hidden" style="font-size:13px;font-weight:800;"></div>
+</div>
+<div class="progress-track thin" style="margin-bottom:20px;"><div class="progress-fill" id="quiz-progress-fill" style="width:0%;"></div></div>
+<div id="current-type-label" style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--section-dark);font-weight:800;margin-bottom:10px;"></div>
+
+<div id="context-box" class="context-box hidden">
+<div class="label" id="context-label"></div>
+<div id="context-text"></div>
+</div>
+
+<div id="prompt-text" style="font-size:17px;line-height:1.6;margin-bottom:18px;white-space:pre-line;"></div>
+<div id="select-hint" class="hidden" style="font-size:13px;color:var(--ink-soft);margin-bottom:10px;font-weight:600;">Select exactly two answers that both fit and create equivalent sentences.</div>
+
+<div id="choices-container"></div>
+
+<div id="feedback-box" class="context-box hidden" style="margin-top:8px;">
+<span class="badge" id="result-badge"></span>
+<div style="margin-top:10px;font-weight:800;">Correct answer</div>
+<div id="correct-answer-text" style="margin-top:2px;"></div>
+<div id="explanation-text" style="margin-top:12px;"></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;gap:12px;margin-top:22px;">
+<button class="ctrl-btn" id="prev-q-btn">&larr; Prev</button>
+<button class="start-btn inline" id="check-btn">Check answer</button>
+<button class="start-btn inline hidden" id="next-btn">Next question &rarr;</button>
+</div>
+<div style="text-align:center;margin-top:20px;">
+<button class="reset-link" id="end-quiz-btn">End quiz now and see results</button>
+</div>
+</div>
+
+<div id="screen-results" class="hidden">
+<div style="text-align:center;margin-bottom:28px;">
+<div id="stars" style="margin-bottom:10px;"></div>
+<div id="final-score" style="font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:700;color:var(--section);"></div>
+<div id="score-message" style="font-size:16px;color:var(--ink-soft);margin-top:6px;font-weight:600;"></div>
+<div id="xp-earned-text" style="font-size:13px;color:var(--xp-dark);margin-top:8px;font-weight:800;"></div>
+<div style="display:flex;justify-content:center;gap:12px;margin-top:20px;">
+<button class="ctrl-btn" id="restart-btn">Try another set</button>
+</div>
+</div>
+<div style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:800;margin-bottom:14px;">Answer key &amp; explanations</div>
+<div id="review-list"></div>
+</div>
+
+</div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/gamify.js"></script>
+<script>
+  window.QUIZ_CONFIG = {
+    questions: QUANT_QUESTIONS,
+    typeKeys: ['problem-solving', 'quantitative-comparison', 'data-interpretation'],
+    typeLabels: {
+      'problem-solving': 'Problem Solving',
+      'quantitative-comparison': 'Quantitative Comparison',
+      'data-interpretation': 'Data Interpretation'
+    },
+    bestKey: 'gre_quant_best',
+    perQSeconds: 110,
+    title: 'Quant Practice',
+    subtitle: 'Problem Solving, Quantitative Comparison, and Data Interpretation questions with a full answer key.'
+  };
+</script>
+<script src="js/quiz.js"></script>
+</body>
+</html>
